@@ -1,59 +1,70 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>叫貨系統</title>
   <style>
     body {
       margin: 0;
       font-family: Arial, "Microsoft JhengHei", sans-serif;
-      background: #f5f6fa;
+      background: #f4f6f8;
     }
 
     .container {
-      max-width: 430px;
+      max-width: 520px;
       margin: 0 auto;
-      padding: 24px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      padding: 20px;
     }
 
     h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
+      text-align: center;
+      font-size: 26px;
+    }
+
+    .section {
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    }
+
+    .section h2 {
+      font-size: 20px;
+      margin-top: 0;
+      border-left: 5px solid #06c755;
+      padding-left: 10px;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 12px 0;
+      gap: 10px;
+    }
+
+    .item span {
+      flex: 1;
+      font-size: 16px;
+    }
+
+    .item input {
+      width: 90px;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
       text-align: center;
     }
 
-    label {
-      display: block;
-      margin-top: 14px;
-      margin-bottom: 6px;
-      font-weight: bold;
-    }
-
-    input, select, textarea, button {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 12px;
-      font-size: 16px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-    }
-
-    textarea {
-      resize: none;
-      height: 80px;
-    }
-
     button {
-      margin-top: 22px;
+      width: 100%;
+      padding: 15px;
+      font-size: 18px;
       border: none;
+      border-radius: 14px;
       background: #06c755;
       color: white;
       font-weight: bold;
@@ -61,100 +72,131 @@
     }
 
     button:disabled {
-      background: #aaa;
+      background: #999;
     }
 
-    .result {
-      margin-top: 16px;
+    #result {
       text-align: center;
+      margin-top: 15px;
       font-weight: bold;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="card">
-      <h1>叫貨系統</h1>
+<div class="container">
+  <h1>叫貨系統</h1>
 
-      <label>叫貨群組</label>
-        <select id="group">
-        <option value="Ceb79097f44417a29e202e45b5992ba04">飲料群</option>
-        <option value="C4edefd068bb20f8debd5e60d1e96e8ef">食材群</option>
-        <option value="C25d9561788d0c09b6e0aaa351386ae78">耗材群</option>
-        </select>
+  <div class="section">
+    <h2>蛤蜊、蚵仔群</h2>
 
-      <label>品項</label>
-      <input id="item" type="text" placeholder="例如：鮮奶、雞蛋、紙杯" />
-
-      <label>數量</label>
-      <input id="quantity" type="text" placeholder="例如：6瓶、3箱、2包" />
-
-      <label>備註</label>
-      <textarea id="note" placeholder="例如：今天下午前送到"></textarea>
-
-      <button id="sendBtn" onclick="sendOrder()">送出叫貨</button>
-
-      <div class="result" id="result"></div>
-    </div>
+    <div class="item"><span>蚵仔（包）</span><input type="number" min="0" data-group="clam" data-name="蚵仔" data-unit="包"></div>
+    <div class="item"><span>蛤蜊（斤）</span><input type="number" min="0" data-group="clam" data-name="蛤蜊" data-unit="斤"></div>
+    <div class="item"><span>鯖魚(半件)（箱）</span><input type="number" min="0" data-group="clam" data-name="鯖魚(半件)" data-unit="箱"></div>
+    <div class="item"><span>一夜干（箱）</span><input type="number" min="0" data-group="clam" data-name="一夜干" data-unit="箱"></div>
+    <div class="item"><span>蟹肉（件）</span><input type="number" min="0" data-group="clam" data-name="蟹肉" data-unit="件"></div>
+    <div class="item"><span>3S干貝（盒）</span><input type="number" min="0" data-group="clam" data-name="3S干貝" data-unit="盒"></div>
+    <div class="item"><span>蝦卵（盒）</span><input type="number" min="0" data-group="clam" data-name="蝦卵" data-unit="盒"></div>
+    <div class="item"><span>開背蝦仁（包）</span><input type="number" min="0" data-group="clam" data-name="開背蝦仁" data-unit="包"></div>
+    <div class="item"><span>墨魚（斤）</span><input type="number" min="0" data-group="clam" data-name="墨魚" data-unit="斤"></div>
+    <div class="item"><span>白蝦（盒）</span><input type="number" min="0" data-group="clam" data-name="白蝦" data-unit="盒"></div>
+    <div class="item"><span>魚蛋（箱）</span><input type="number" min="0" data-group="clam" data-name="魚蛋" data-unit="箱"></div>
   </div>
 
-  <script>
-    async function sendOrder() {
-      const groupId = document.getElementById('group').value;
-      const item = document.getElementById('item').value.trim();
-      const quantity = document.getElementById('quantity').value.trim();
-      const note = document.getElementById('note').value.trim();
+  <div class="section">
+    <h2>雞腿群</h2>
 
-      const result = document.getElementById('result');
-      const button = document.getElementById('sendBtn');
+    <div class="item"><span>T6雞腿（件）</span><input type="number" min="0" data-group="chicken" data-name="T6雞腿" data-unit="件"></div>
+    <div class="item"><span>雞腿肉絲（斤）</span><input type="number" min="0" data-group="chicken" data-name="雞腿肉絲" data-unit="斤"></div>
+  </div>
 
-      if (!item || !quantity) {
-        result.style.color = 'red';
-        result.textContent = '請輸入品項和數量';
-        return;
+  <div class="section">
+    <h2>燒肉群</h2>
+
+    <div class="item"><span>燒肉（份）</span><input type="number" min="0" data-group="pork" data-name="燒肉" data-unit="份"></div>
+    <div class="item"><span>素肉鬆（包）</span><input type="number" min="0" data-group="pork" data-name="素肉鬆" data-unit="包"></div>
+  </div>
+
+  <button id="sendBtn" onclick="sendOrder()">送出叫貨</button>
+  <div id="result"></div>
+</div>
+
+<script>
+  const groupIds = {
+    clam: 'Ceb79097f44417a29e202e45b5992ba04',
+    chicken: 'C4edefd068bb20f8debd5e60d1e96e8ef',
+    pork: 'C25d9561788d0c09b6e0aaa351386ae78'
+  };
+
+  const groupNames = {
+    clam: '蛤蜊、蚵仔群',
+    chicken: '雞腿群',
+    pork: '燒肉群'
+  };
+
+  async function sendOrder() {
+    const inputs = document.querySelectorAll('input[type="number"]');
+    const groupedOrders = {};
+
+    inputs.forEach(input => {
+      const quantity = input.value.trim();
+
+      if (quantity && Number(quantity) > 0) {
+        const group = input.dataset.group;
+
+        if (!groupedOrders[group]) {
+          groupedOrders[group] = [];
+        }
+
+        groupedOrders[group].push({
+          name: input.dataset.name,
+          quantity,
+          unit: input.dataset.unit
+        });
       }
+    });
 
-      button.disabled = true;
-      button.textContent = '送出中...';
-      result.textContent = '';
+    const result = document.getElementById('result');
+    const button = document.getElementById('sendBtn');
 
-      try {
-        const response = await fetch('/api/order', {
+    if (Object.keys(groupedOrders).length === 0) {
+      result.style.color = 'red';
+      result.textContent = '請至少輸入一個商品數量';
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = '送出中...';
+    result.textContent = '';
+
+    try {
+      for (const group in groupedOrders) {
+        await fetch('/api/group-order', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            groupId,
-            item,
-            quantity,
-            note
+            groupId: groupIds[group],
+            groupName: groupNames[group],
+            items: groupedOrders[group]
           })
         });
-
-        const data = await response.json();
-
-        if (data.success) {
-          result.style.color = 'green';
-          result.textContent = '叫貨單已送出！';
-
-          document.getElementById('item').value = '';
-          document.getElementById('quantity').value = '';
-          document.getElementById('note').value = '';
-        } else {
-          result.style.color = 'red';
-          result.textContent = '送出失敗';
-        }
-      } catch (error) {
-        result.style.color = 'red';
-        result.textContent = '連線失敗，請確認伺服器有啟動';
       }
 
-      button.disabled = false;
-      button.textContent = '送出叫貨';
+      result.style.color = 'green';
+      result.textContent = '叫貨單已送出！';
+
+      inputs.forEach(input => input.value = '');
+    } catch (error) {
+      result.style.color = 'red';
+      result.textContent = '送出失敗，請稍後再試';
     }
-  </script>
+
+    button.disabled = false;
+    button.textContent = '送出叫貨';
+  }
+</script>
 
 </body>
 </html>

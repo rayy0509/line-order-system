@@ -5,11 +5,9 @@ const axios = require('axios');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-
-// 讓 index.html 可以被打開
 app.use(express.static(__dirname));
 
 // 接收 LINE webhook
@@ -46,22 +44,24 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// 網頁叫貨 API
-app.post('/api/order', async (req, res) => {
+// 多商品自動分群叫貨 API
+app.post('/api/group-order', async (req, res) => {
   try {
-    const { groupId, item, quantity, note } = req.body;
+    const { groupId, groupName, items } = req.body;
 
-    if (!groupId || !item || !quantity) {
+    if (!groupId || !items || items.length === 0) {
       return res.status(400).json({
         success: false,
-        message: '缺少群組、品項或數量'
+        message: '缺少群組或商品資料'
       });
     }
 
-    const message = `【叫貨單】
-品項：${item}
-數量：${quantity}
-備註：${note || '無'}`;
+    let message = `【叫貨單】\n`;
+    message += `群組：${groupName}\n\n`;
+
+    items.forEach(item => {
+      message += `${item.name}：${item.quantity}${item.unit}\n`;
+    });
 
     await sendLineGroupMessage(groupId, message);
 
@@ -99,5 +99,5 @@ app.get('/send', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

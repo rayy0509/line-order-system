@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>叫貨系統</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, "Microsoft JhengHei", sans-serif;
+      background: #f5f6fa;
+    }
+
+    .container {
+      max-width: 430px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    input, select, textarea, button {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    textarea {
+      resize: none;
+      height: 80px;
+    }
+
+    button {
+      margin-top: 22px;
+      border: none;
+      background: #06c755;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background: #aaa;
+    }
+
+    .result {
+      margin-top: 16px;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="card">
+      <h1>叫貨系統</h1>
+
+      <label>叫貨群組</label>
+      <select id="group">
+        <option value="C25d9561788d0c09b6e0aaa351386ae78">測試群</option>
+      </select>
+
+      <label>品項</label>
+      <input id="item" type="text" placeholder="例如：鮮奶、雞蛋、紙杯" />
+
+      <label>數量</label>
+      <input id="quantity" type="text" placeholder="例如：6瓶、3箱、2包" />
+
+      <label>備註</label>
+      <textarea id="note" placeholder="例如：今天下午前送到"></textarea>
+
+      <button id="sendBtn" onclick="sendOrder()">送出叫貨</button>
+
+      <div class="result" id="result"></div>
+    </div>
+  </div>
+
+  <script>
+    async function sendOrder() {
+      const groupId = document.getElementById('group').value;
+      const item = document.getElementById('item').value.trim();
+      const quantity = document.getElementById('quantity').value.trim();
+      const note = document.getElementById('note').value.trim();
+
+      const result = document.getElementById('result');
+      const button = document.getElementById('sendBtn');
+
+      if (!item || !quantity) {
+        result.style.color = 'red';
+        result.textContent = '請輸入品項和數量';
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = '送出中...';
+      result.textContent = '';
+
+      try {
+        const response = await fetch('/api/order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            groupId,
+            item,
+            quantity,
+            note
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          result.style.color = 'green';
+          result.textContent = '叫貨單已送出！';
+
+          document.getElementById('item').value = '';
+          document.getElementById('quantity').value = '';
+          document.getElementById('note').value = '';
+        } else {
+          result.style.color = 'red';
+          result.textContent = '送出失敗';
+        }
+      } catch (error) {
+        result.style.color = 'red';
+        result.textContent = '連線失敗，請確認伺服器有啟動';
+      }
+
+      button.disabled = false;
+      button.textContent = '送出叫貨';
+    }
+  </script>
+
+</body>
+</html>

@@ -100,14 +100,14 @@ app.get('/send', async (req, res) => {
 });
 
 
-// 測試 MySQL 連線
+// 測試 Supabase PostgreSQL 連線
 app.get('/test-db', async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT NOW() AS time');
+    const result = await db.query('SELECT NOW()');
 
     res.json({
       success: true,
-      time: rows[0].time
+      time: result.rows[0].now
     });
   } catch (error) {
     console.error(error);
